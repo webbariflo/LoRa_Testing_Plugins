@@ -214,40 +214,13 @@ class MqttPlugin(octoprint.plugin.SettingsPlugin,
     ##~~ PrinterCallback
 
     def on_printer_add_temperature(self, data):
-        topic = self._get_topic("temperature")
-        threshold = self._settings.get_float(["publish", "temperatureThreshold"])
+        dataset = data
+        directory_path = '/home/pi/OctoPrint/'
+        file_name = 'example.txt'
+        file_path = os.path.join(directory_path, file_name)
 
-        if topic:
-            for key, value in data.items():
-                if key == "time":
-                    continue
-
-                # skip any entries that are none or zero.
-                if not (value.get("actual") or value.get("target")):
-                    continue
-
-                # in issue #42 the problem wasn't a failure to get the key, but
-                # the last_temp value was None. Hence "or 0". However by pulling
-                # lastTemp we risk failing on the dict navigation, so we'll be careful.
-                safe_actual_temp = value.get("actual") or 0
-                safe_actual_target_temp = value.get("target") or 0
-                safe_last_temp = 0
-                safe_last_target_temp = 0
-                if key in self.lastTemp:
-                    safe_last_temp = self.lastTemp[key].get("actual") or 0
-                    safe_last_target_temp = self.lastTemp[key].get("target") or 0
-
-                # some pedantry on the target temp to keep away from float math problems
-                if not safe_last_temp \
-                    or abs(safe_actual_temp - safe_last_temp) >= threshold \
-                    or abs(safe_actual_target_temp - safe_last_target_temp) >= 0.1:
-                    # unknown key, new actual or new target -> update mqtt topic!
-                    dataset = dict(actual=value["actual"],
-                                   target=value["target"])
-                    self.mqtt_publish_with_timestamp(topic.format(temp=key), dataset,
-                                                     allow_queueing=True,
-                                                     timestamp=data["time"])
-                    self.lastTemp.update({key: data[key]})
+        with open(file_path, 'w') as file:
+            file.write(str(dataset))
 
     ##~~ Softwareupdate hook
 
