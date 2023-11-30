@@ -26,6 +26,7 @@ class MqttPlugin(octoprint.printer.PrinterCallback):
         
             with open(file_path, 'w') as file:
                 file.write(str(dataset))
+            self._logger.info(f"Temperature data written: {dataset}")
 
 
 __plugin_name__ = "MQTT"
