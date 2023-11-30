@@ -17,15 +17,14 @@ class MqttPlugin(octoprint.printer.PrinterCallback):
 
     def on_printer_add_temperature(self, data):
         for key, value in data.items():
-                
-            dataset = dict(actual=value["actual"],
-                            target=value["target"])
+            dataset = json.dumps({"actual": value["actual"], "target": value["target"]})
             directory_path = '/home/pi/OctoPrint/'
             file_name = 'example.txt'
             file_path = os.path.join(directory_path, file_name)
-        
-            with open(file_path, 'w') as file:
-                file.write(str(dataset))
+    
+            with open(file_path, 'a') as file:
+                file.write(str(dataset) + '\n')
+    
             self._logger.info(f"Temperature data written: {dataset}")
 
 
