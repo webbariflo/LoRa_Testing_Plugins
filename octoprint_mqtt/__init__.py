@@ -28,6 +28,6 @@ class MqttPlugin(octoprint.printer.PrinterCallback):
             self._logger.info(f"Temperature data written: {dataset}")
 
 
-__plugin_name__ = "MQTT"
+__plugin_name__ = "LoRa_Testing_Plugins"
 __plugin_pythoncompat__ = ">=2.7,<4"
 __plugin_implementation__ = MqttPlugin()
