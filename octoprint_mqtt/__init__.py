@@ -30,11 +30,4 @@ class MqttPlugin(octoprint.printer.PrinterCallback):
 
 __plugin_name__ = "MQTT"
 __plugin_pythoncompat__ = ">=2.7,<4"
-
-def __plugin_load__():
-    plugin = MqttPlugin()
-
-    global __plugin_hooks__
-    __plugin_hooks__ = {
-        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
-    }
+__plugin_implementation__ = MqttPlugin()
